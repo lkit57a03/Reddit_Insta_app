@@ -29,6 +29,7 @@ def write_memes_to_file(memes_list= '', subreddit_name = 'memes'):
         for item in memes_list:
             found = memes_data[memes_data['id'].str.contains(item['id'])]
             if (len(found) == 0):
+                print(item['id'], item['title'], item['url'], item['score'], item['uploaded'])
                 writer.writerow([item['id'], item['title'], item['url'], item['score'], item['uploaded']])
             else:
                 pass
