@@ -3,29 +3,28 @@ import pandas as pd
 
 username = '7355517759'
 password = 'j0y0isgreat'
-image    = 'ythcbag3l4r31.jpg'
-text     = 'oh boy, here we go again'
 
 
-def upload_files(image_url, title):
+def upload_files(username, password, image_url, title):
     with client(username, password) as cli:
+        print(image_url, title)
         return_val = cli.upload(image_url, title)
         print(return_val)
     return return_val['status'] == 'ok' 
 
-def give_un_uploaded_memes(filename= 'memes_data.csv'):
+def check_for_non_uploaded_and_upload(username, password,subreddit_name='meme'):
+    filename = 'data/{}_data.csv'.format(subreddit_name)
     df = pd.read_csv(filename, index_col='id')
-
+    print(username, password)
 
     for index, row in df.loc[df['updated']==False].iterrows():
-        upload_files(row['url'], row['title'])
+        if row['url'].endswith('.jpg'):
+            return_value = upload_files(username, password, row['url'], row['title'])
+        else:
+            return_value = 0
         df.loc[index,'updated'] = True
         break
 
-
     print(df.head())
-    df.to_csv('memes_data.csv')
-
-    return non_uploaded
-    
-give_un_uploaded_memes()
+    df.to_csv(filename)
+    return return_value

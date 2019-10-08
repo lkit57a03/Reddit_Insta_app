@@ -4,18 +4,22 @@ import os
 
 import memes_dowloader
 
+filename = 'data/memes_data.csv'
+
 def file_exists_or_not_empty(filename):
     filename = os.path.join(os.getcwd(), filename)
     return os.path.isfile(filename) and os.path.getsize(filename) > 0
 
-def initialize_file(filename= 'memes_data.csv'):
+def initialize_file(filename):
     with open(filename,'w+') as memes_file:
         writer = csv.writer(memes_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
         does_file_exists =  file_exists_or_not_empty(filename)
         if not does_file_exists:
             writer.writerow(["id","title","url","score","updated"])
 
-def write_memes_to_file(memes_list, filename = 'memes_data.csv'):
+def write_memes_to_file(memes_list= '', subreddit_name = 'memes'):
+    filename = 'data/{}_data.csv'.format(subreddit_name)
+    
     if not file_exists_or_not_empty(filename):
         initialize_file(filename=filename)
 
@@ -29,8 +33,4 @@ def write_memes_to_file(memes_list, filename = 'memes_data.csv'):
             else:
                 pass
 
-
-
-memes_list = memes_dowloader.get_posts()      
-write_memes_to_file(memes_list=memes_list)  
         
