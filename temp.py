@@ -9,4 +9,4 @@ temp = df.loc[df['updated']==False]
 
 for index, row in temp.iterrows():
     print(row['url'])
-# df.to_csv('memes_data.csv')
+df.to_csv('memes_data.csv')

@@ -6,28 +6,26 @@ password = 'j0y0isgreat'
 image    = 'ythcbag3l4r31.jpg'
 text     = 'oh boy, here we go again'
 
-# with client(username, password) as cli:
-#     return_val = cli.upload("https://i.redd.it/2bud7tc6p3r31.jpg", text)
-#     print(return_val)
 
-def upload_files(non_uploaded_df):
-    for index, row in non_uploaded_df.iterrows():
-        row['updated'] = True
+def upload_files(image_url, title):
+    with client(username, password) as cli:
+        return_val = cli.upload(image_url, title)
+        print(return_val)
+    return return_val['status'] == 'ok' 
 
 def give_un_uploaded_memes(filename= 'memes_data.csv'):
     df = pd.read_csv(filename, index_col='id')
 
-    non_uploaded = df.loc[df['updated']==False]
 
-    for index, row in df.iterrows():
-        row['updated'] = True
-    
+    for index, row in df.loc[df['updated']==False].iterrows():
+        upload_files(row['url'], row['title'])
+        df.loc[index,'updated'] = True
+        break
+
+
+    print(df.head())
     df.to_csv('memes_data.csv')
-
-    # for index, row in non_uploaded.iterrows():
-    #     print(row['url'])
 
     return non_uploaded
     
-
-upload_files(give_un_uploaded_memes())
+give_un_uploaded_memes()
